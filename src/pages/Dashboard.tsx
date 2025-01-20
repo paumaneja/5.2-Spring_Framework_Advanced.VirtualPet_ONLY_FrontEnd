@@ -39,25 +39,25 @@ const getImagePath = (type: string, weapon: string | null) => {
 
     const typeToImageMap = {
       STARWARS: {
-        Pistol: "starwars_pistol.webp",
-        "Machine Gun": "starwars_machinegun.webp",
-        Lightsaber: "starwars_lightsaber.webp",
-        default: "starwars_default.webp",
+        Pistol: "starwars_pistol.png",
+        "Machine Gun": "starwars_machinegun.png",
+        Lightsaber: "starwars_lightsaber.png",
+        default: "starwars_default.png",
       },
       LORDRINGS: {
-        Sword: "lordrings_sword.webp",
-        Axe: "lordrings_axe.webp",
-        Bow: "lordrings_bow.webp",
-        default: "lordrings_default.webp",
+        Sword: "lordrings_sword.png",
+        Axe: "lordrings_axe.png",
+        Bow: "lordrings_bow.png",
+        default: "lordrings_default.png",
       },
     };
 
     const typeMap = typeToImageMap[type];
     if (!typeMap) {
-      return "default.webp";
+      return "default.png";
     }
 
-    return typeMap[weapon || "default"] || "default.webp";
+    return typeMap[weapon || "default"] || "default.png";
   };
 
   return (
