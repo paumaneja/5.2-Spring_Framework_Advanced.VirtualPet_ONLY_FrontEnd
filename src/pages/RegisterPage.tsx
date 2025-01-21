@@ -33,42 +33,34 @@ const RegisterPage: React.FC = () => {
       <div className="login-container">
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>First Name</label>
-            <input
-              type="text"
-              value={firstname}
-              onChange={(e) => setFirstname(e.target.value)}
-              required
+          <input
+            type="text"
+            placeholder="First name"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Last name"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            required
             />
-          </div>
-          <div>
-            <label>Last Name</label>
-            <input
-              type="text"
-              value={lastname}
-              onChange={(e) => setLastname(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           {error && <p style={{ color: "red" }}>{error}</p>}
           {success && <p style={{ color: "green" }}>{success}</p>}
           <button type="submit">Register</button>

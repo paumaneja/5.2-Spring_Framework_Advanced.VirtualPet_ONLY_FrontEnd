@@ -7,7 +7,7 @@ html, body {
 }
 
 .login-page {
-  background-image: url("../assets/fons api.webp"); /* Ruta a la teva imatge */
+  background-image: url("../assets/fons api.webp"); /* Ruta a la imatge */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -19,18 +19,20 @@ html, body {
 }
 
 .login-container {
-  background-color: rgba(255, 255, 255, 0.9); /* Fons translúcid */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  background: rgba(255, 255, 255, 0.2); /* Fons translúcid */
+  backdrop-filter: blur(10px); /* Efecte de desenfoc */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombra suau */
+  max-width: 300px;
   width: 100%;
+  text-align: center;
 }
 
 h2 {
-  text-align: center;
   margin-bottom: 20px;
-  color: #4CAF50;
+  color: #333333; /* Color del text */
+  font-weight: bold;
 }
 
 form {
@@ -38,43 +40,42 @@ form {
   flex-direction: column;
 }
 
-label {
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #FF5733;
-}
-
 input {
   margin-bottom: 15px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 5px;
-  background-color: #F0F8FF;
-  color: #000;
+  background-color: rgba(255, 255, 255, 0.8); /* Transparent */
+  color: #000; /* Text negre */
+  font-size: 1rem;
+}
+
+input::placeholder {
+  color: #888; /* Color del text de guia */
 }
 
 button {
-  background-color: #28B463;
+  background-color: #4caf50; /* Verd */
   color: white;
   padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #388e3c;
 }
 
 p {
-  text-align: center;
-  margin-top: 15px;
-  color: #3498DB;
+  margin-top: 20px;
+  color: #ffffff; /* Text blanc */
 }
 
 a {
-  color: #007bff;
+  color: #333333; /* Color groc per l'enllaç */
   text-decoration: none;
 }
 

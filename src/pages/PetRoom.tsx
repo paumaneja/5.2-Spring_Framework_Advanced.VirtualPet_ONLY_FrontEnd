@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Importem useNavigate
 import "./PetRoom.css";
 
 const PetRoom = () => {
@@ -7,6 +7,9 @@ const PetRoom = () => {
   const [pet, setPet] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [showWeaponOptions, setShowWeaponOptions] = useState(false);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false); // Estat per al vídeo
+  const [videoSrc, setVideoSrc] = useState<string | null>(null); // Estat per a la font del vídeo
+  const navigate = useNavigate(); // Hook per navegar entre pàgines
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -40,17 +43,49 @@ const PetRoom = () => {
     return <p>Loading...</p>;
   }
 
-  const backgroundImage = `/assets/${pet.type.toLowerCase()}_${pet.weapon ? pet.weapon.toLowerCase() : "default"}.webp`;
+ const backgroundImage = `/assets/${pet.type.toLowerCase()}_${pet.weapon ? pet.weapon.toLowerCase().replace(" ", "_") : "default"}.png`;
+
+  const getVideoForPet = (type: string, weapon: string | null) => {
+    const videoMap: Record<string, Record<string, string>> = {
+      STARWARS: {
+        Pistol: "/assets/videos/starwars_pistol.mp4",
+        "Machine Gun": "/assets/videos/starwars_machine_gun.mp4",
+        Lightsaber: "/assets/videos/starwars_lightsaber.mp4",
+        default: "/assets/videos/starwars_default.mp4",
+      },
+      LORDRINGS: {
+        Sword: "/assets/videos/lordrings_sword.mp4",
+        Axe: "/assets/videos/lordrings_axe.mp4",
+        Bow: "/assets/videos/lordrings_bow.mp4",
+        default: "/assets/videos/lordrings_default.mp4",
+      },
+    };
+
+    return videoMap[type]?.[weapon || "default"] || "/assets/videos/default.mp4";
+  };
 
   const handleAction = async (action: string, weapon?: string) => {
+    if (action === "play") {
+      const video = getVideoForPet(pet.type, pet.weapon);
+      setVideoSrc(video);
+      setIsPlayingVideo(true);
+
+      setTimeout(() => {
+        setIsPlayingVideo(false);
+        setVideoSrc(null);
+      }, 5000);
+    }
+
     try {
-      const response = await fetch(`http://localhost:8080/pets/${id}?action=${action}`, {
+      const url = weapon
+        ? `http://localhost:8080/pets/${id}?action=${action}&newWeapon=${weapon}`
+        : `http://localhost:8080/pets/${id}?action=${action}`;
+
+      const response = await fetch(url, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: weapon ? JSON.stringify({ weapon }) : null,
       });
 
       if (!response.ok) {
@@ -59,9 +94,9 @@ const PetRoom = () => {
 
       const updatedPet = await response.json();
       setPet(updatedPet);
-      setShowWeaponOptions(false); // Hide weapon options after selection
+      setShowWeaponOptions(false);
     } catch (err: any) {
-      console.error(err.message);
+      setError("Failed to perform action. Please try again.");
     }
   };
 
@@ -92,25 +127,51 @@ const PetRoom = () => {
     <div
       className="pet-room"
       style={{
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: isPlayingVideo
+          ? "none" // Si es reprodueix el vídeo, eliminem la imatge de fons
+          : `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
+      {/* Mostrem el vídeo si s'està jugant */}
+      {isPlayingVideo && videoSrc && (
+        <video
+          src={videoSrc}
+          autoPlay
+          muted
+          className="video-background"
+          onEnded={() => {
+            setIsPlayingVideo(false);
+            setVideoSrc(null);
+          }}
+        />
+      )}
+
+      {/* Botó per tornar a la pàgina Dashboard */}
+      <button className="back-button" onClick={() => navigate("/dashboard")}>
+        Back to your army
+      </button>
+
       <div className="pet-info">
         <h2>{pet.name}</h2>
         <p>Energy: {pet.energy}%</p>
         <p>Mood: {pet.mood}</p>
-        <p>Weapon: {pet.weapon || "None"}</p>
       </div>
-      <div className="action-buttons">
-        <button onClick={() => handleAction("play")}>Play</button>
-        <button onClick={() => handleAction("feed")}>Feed</button>
-        <button onClick={() => handleAction("sleep")}>Sleep</button>
-        <button onClick={() => setShowWeaponOptions(!showWeaponOptions)}>
-          Change Weapon
-        </button>
-      </div>
+     <div className="action-buttons">
+          <button onClick={() => handleAction("play")}>
+            <img src="/assets/icons/play.png" alt="Play" className="action-icon" />
+          </button>
+          <button onClick={() => handleAction("feed")}>
+            <img src="/assets/icons/feed.png" alt="Feed" className="action-icon" />
+          </button>
+          <button onClick={() => handleAction("sleep")}>
+            <img src="/assets/icons/sleep.png" alt="Sleep" className="action-icon" />
+          </button>
+          <button onClick={() => setShowWeaponOptions(!showWeaponOptions)}>
+            <img src="/assets/icons/change_weapon.png" alt="Change Weapon" className="action-icon" />
+          </button>
+        </div>
       {showWeaponOptions && renderWeaponOptions()}
     </div>
   );
