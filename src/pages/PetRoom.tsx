@@ -64,6 +64,28 @@ const PetRoom = () => {
     return videoMap[type]?.[weapon || "default"] || "/assets/videos/default.mp4";
   };
 
+  const handleDeletePet = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/pets/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete pet");
+      }
+
+      alert("Pet deleted successfully.");
+      navigate("/dashboard"); // Torna al Dashboard
+    } catch (err) {
+      setError("Failed to delete pet. Please try again.");
+    }
+  };
+
+
+
   const handleAction = async (action: string, weapon?: string) => {
     if (action === "play") {
       const video = getVideoForPet(pet.type, pet.weapon);
@@ -130,7 +152,7 @@ const PetRoom = () => {
         backgroundImage: isPlayingVideo
           ? "none" // Si es reprodueix el vídeo, eliminem la imatge de fons
           : `url(${backgroundImage})`,
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundPosition: "center",
       }}
     >
@@ -148,9 +170,13 @@ const PetRoom = () => {
         />
       )}
 
-      {/* Botó per tornar a la pàgina Dashboard */}
+      {/* Botons per tornar a la pàgina Dashboard i eliminar la mascota*/}
       <button className="back-button" onClick={() => navigate("/dashboard")}>
         Back to your army
+      </button>
+
+      <button className="delete-button" onClick={handleDeletePet}>
+        Delete Warrior
       </button>
 
       <div className="pet-info">

@@ -1,6 +1,6 @@
 .dashboard {
   background-image: url("../assets/fons_dashboard.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;
@@ -9,22 +9,6 @@
   flex-direction: column;
   align-items: center;
 }
-
-.dashboard-banner {
-  max-width: 20%;
-  height: auto;
-  margin: 0 auto;
-  display: block;
-}
-
-.header-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-
 
 .pet-container {
   display: grid;
@@ -37,6 +21,9 @@
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-top: 210px;
+    /* Nou estil per afegir scroll vertical */
+    max-height: 60vh; /* Limita l'alçada màxima del contenidor */
+    overflow-y: auto; /* Habilita el scroll vertical */
 }
 
 .pet-card {
@@ -51,6 +38,10 @@
   overflow: hidden;
   transition: transform 0.2s;
   gap: 20px;
+
+    /* Assegura una mida consistent */
+    min-height: 400px; /* Ajust segons el contingut */
+    height: auto; /* Permet expansió segons el text */
 }
 
 .pet-card:hover {
