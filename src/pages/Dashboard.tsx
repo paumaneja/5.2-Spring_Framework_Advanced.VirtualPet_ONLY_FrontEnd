@@ -3,23 +3,28 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Dashboard.css";
 
-const MyPets = () => {
+const Dashboard = () => {
   const [pets, setPets] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [newPetName, setNewPetName] = useState("");
   const [newPetType, setNewPetType] = useState("");
   const navigate = useNavigate();
+  const isAdmin = localStorage.getItem("role") === "ADMIN";
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      setError("User ID not found");
-      return;
-    }
+    const endpoint = isAdmin
+      ? "http://localhost:8080/pets/getAllPets"
+      : "http://localhost:8080/pets/getPetsByOwner";
+
+    const params = isAdmin ? {} : { ownerId: localStorage.getItem("userId") };
+
+    console.log(isAdmin);
+    console.log("Endpoint cridat:", endpoint);
+
 
     axios
-      .get("http://localhost:8080/pets/getPetsByOwner", {
-        params: { ownerId: userId },
+      .get(endpoint, {
+        params,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -29,14 +34,15 @@ const MyPets = () => {
         setError(null);
       })
       .catch((err) => {
-        setError("Error fetching pets: " + (err.response?.data?.message || err.message));
+        setError(
+          "Error fetching pets: " + (err.response?.data?.message || err.message)
+        );
       });
-  }, []);
+  }, [isAdmin]);
 
   const handlePetClick = (id: number) => {
     navigate(`/pets/${id}`);
   };
-
 
   const handleCreatePet = () => {
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
@@ -56,16 +62,15 @@ const MyPets = () => {
         }
       )
       .then((response) => {
-            setPets((prevPets) => [...prevPets, response.data]);
-            setNewPetName("");
-            setNewPetType("");
-            setError(null);
-          })
-          .catch((err) => {
-            setError("Error creating pet: " + (err.response?.data?.message || err.message));
-          });
+        setPets((prevPets) => [...prevPets, response.data]);
+        setNewPetName("");
+        setNewPetType("");
+        setError(null);
+      })
+      .catch((err) => {
+        setError("Error creating pet: " + (err.response?.data?.message || err.message));
+      });
   };
-
 
   const getImagePath = (type: string, weapon: string | null) => {
     const typeToImageMap = {
@@ -127,17 +132,17 @@ const MyPets = () => {
             value={newPetName}
             onChange={(e) => setNewPetName(e.target.value)}
           />
-            <select
-              value={newPetType}
-              onChange={(e) => setNewPetType(e.target.value)}
-              className="pet-type-select"
-            >
-              <option value="" disabled>
-                Select Warrior Type
-              </option>
-              <option value="STARWARS">STARWARS</option>
-              <option value="LORDRINGS">LORDRINGS</option>
-            </select>
+          <select
+            value={newPetType}
+            onChange={(e) => setNewPetType(e.target.value)}
+            className="pet-type-select"
+          >
+            <option value="" disabled>
+              Select Warrior Type
+            </option>
+            <option value="STARWARS">STARWARS</option>
+            <option value="LORDRINGS">LORDRINGS</option>
+          </select>
           <button onClick={handleCreatePet}>Create Warrior</button>
         </div>
       </div>
@@ -145,4 +150,4 @@ const MyPets = () => {
   );
 };
 
-export default MyPets;
+export default Dashboard;
