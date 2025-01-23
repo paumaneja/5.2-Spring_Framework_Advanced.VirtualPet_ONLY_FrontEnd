@@ -22,8 +22,8 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-top: 210px;
   /* Nou estil per afegir scroll vertical */
-  max-height: 60vh; /* Limita l'alçada màxima del contenidor */
-  overflow-y: auto; /* Habilita el scroll vertical */
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .pet-card {
@@ -38,8 +38,8 @@
   overflow: hidden;
   transition: transform 0.2s;
 
-  min-height: 400px; /* Ajust segons el contingut */
-  height: auto; /* Permet expansió segons el text */
+  min-height: 400px;
+  height: auto;
 }
 
 .pet-card:hover {
@@ -192,7 +192,7 @@ h3 {
 
 .mood-segment.active {
   border: 2px solid #000;
-  transform: scale(1.05); /* Légèrement plus grand */
-  font-size: 14px; /* Augmenta la mida del text */
+  transform: scale(1.05);
+  font-size: 14px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }

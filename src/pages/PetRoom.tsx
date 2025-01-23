@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Importem useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import "./PetRoom.css";
 
 const PetRoom = () => {
@@ -7,9 +7,9 @@ const PetRoom = () => {
   const [pet, setPet] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [showWeaponOptions, setShowWeaponOptions] = useState(false);
-  const [isPlayingVideo, setIsPlayingVideo] = useState(false); // Estat per al vídeo
-  const [videoSrc, setVideoSrc] = useState<string | null>(null); // Estat per a la font del vídeo
-  const navigate = useNavigate(); // Hook per navegar entre pàgines
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -45,23 +45,55 @@ const PetRoom = () => {
 
  const backgroundImage = `/assets/${pet.type.toLowerCase()}_${pet.weapon ? pet.weapon.toLowerCase().replace(" ", "_") : "default"}.png`;
 
-  const getVideoForPet = (type: string, weapon: string | null) => {
-    const videoMap: Record<string, Record<string, string>> = {
+  const getVideoForPet = (type: string, weapon: string | null, action: string) => {
+    const videoMap: Record<string, Record<string, Record<string, string>>> = {
       STARWARS: {
-        Pistol: "/assets/videos/starwars_pistol.mp4",
-        "Machine Gun": "/assets/videos/starwars_machine_gun.mp4",
-        Lightsaber: "/assets/videos/starwars_lightsaber.mp4",
-        default: "/assets/videos/starwars_default.mp4",
+        Pistol: {
+          play: "/assets/videos/starwars_pistol_play.mp4",
+          feed: "/assets/videos/starwars_pistol_feed.mp4",
+          sleep: "/assets/videos/starwars_pistol_sleep.mp4",
+        },
+        "Machine Gun": {
+          play: "/assets/videos/starwars_machine_gun_play.mp4",
+          feed: "/assets/videos/starwars_machine_gun_feed.mp4",
+          sleep: "/assets/videos/starwars_machine_gun_sleep.mp4",
+        },
+        Lightsaber: {
+          play: "/assets/videos/starwars_lightsaber_play.mp4",
+          feed: "/assets/videos/starwars_lightsaber_feed.mp4",
+          sleep: "/assets/videos/starwars_lightsaber_sleep.mp4",
+        },
+        default: {
+          play: "/assets/videos/starwars_default_play.mp4",
+          feed: "/assets/videos/starwars_default_feed.mp4",
+          sleep: "/assets/videos/starwars_default_sleep.mp4",
+        },
       },
       LORDRINGS: {
-        Sword: "/assets/videos/lordrings_sword.mp4",
-        Axe: "/assets/videos/lordrings_axe.mp4",
-        Bow: "/assets/videos/lordrings_bow.mp4",
-        default: "/assets/videos/lordrings_default.mp4",
+        Sword: {
+          play: "/assets/videos/lordrings_sword_play.mp4",
+          feed: "/assets/videos/lordrings_sword_feed.mp4",
+          sleep: "/assets/videos/lordrings_sword_sleep.mp4",
+        },
+        Axe: {
+          play: "/assets/videos/lordrings_axe_play.mp4",
+          feed: "/assets/videos/lordrings_axe_feed.mp4",
+          sleep: "/assets/videos/lordrings_axe_sleep.mp4",
+        },
+        Bow: {
+          play: "/assets/videos/lordrings_bow_play.mp4",
+          feed: "/assets/videos/lordrings_bow_feed.mp4",
+          sleep: "/assets/videos/lordrings_bow_sleep.mp4",
+        },
+        default: {
+          play: "/assets/videos/lordrings_default_play.mp4",
+          feed: "/assets/videos/lordrings_default_feed.mp4",
+          sleep: "/assets/videos/lordrings_default_sleep.mp4",
+        },
       },
     };
 
-    return videoMap[type]?.[weapon || "default"] || "/assets/videos/default.mp4";
+    return videoMap[type]?.[weapon || "default"]?.[action] || "/assets/videos/default.mp4";
   };
 
   const handleDeletePet = async () => {
@@ -77,26 +109,22 @@ const PetRoom = () => {
         throw new Error("Failed to delete pet");
       }
 
-      alert("Pet deleted successfully.");
-      navigate("/dashboard"); // Torna al Dashboard
+      navigate("/dashboard");
     } catch (err) {
       setError("Failed to delete pet. Please try again.");
     }
   };
 
 
-
   const handleAction = async (action: string, weapon?: string) => {
-    if (action === "play") {
-      const video = getVideoForPet(pet.type, pet.weapon);
-      setVideoSrc(video);
-      setIsPlayingVideo(true);
+    const video = getVideoForPet(pet.type, pet.weapon, action);
+    setVideoSrc(video);
+    setIsPlayingVideo(true);
 
-      setTimeout(() => {
-        setIsPlayingVideo(false);
-        setVideoSrc(null);
-      }, 5000);
-    }
+    setTimeout(() => {
+      setIsPlayingVideo(false);
+      setVideoSrc(null);
+    }, 5000);
 
     try {
       const url = weapon
@@ -148,13 +176,12 @@ const PetRoom = () => {
   return (
     <div className="pet-room" style={{
         backgroundImage: isPlayingVideo
-          ? "none" // Si es reprodueix el vídeo, eliminem la imatge de fons
+          ? "none"
           : `url(${backgroundImage})`,
         backgroundSize: "contain",
         backgroundPosition: "center",
       }}
     >
-      {/* Mostrem el vídeo si s'està jugant */}
       {isPlayingVideo && videoSrc && (
         <video
           src={videoSrc}
@@ -168,7 +195,6 @@ const PetRoom = () => {
         />
       )}
 
-      {/* Botons per tornar a la pàgina Dashboard i eliminar la mascota*/}
       <button className="back-button" onClick={() => navigate("/dashboard")}>
         <img src="/assets/icons/back.png" alt="back" className="action-icon" />
       </button>

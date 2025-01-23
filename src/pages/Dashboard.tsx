@@ -18,10 +18,6 @@ const Dashboard = () => {
 
     const params = isAdmin ? {} : { ownerId: localStorage.getItem("userId") };
 
-    console.log(isAdmin);
-    console.log("Endpoint cridat:", endpoint);
-
-
     axios
       .get(endpoint, {
         params,
@@ -118,18 +114,17 @@ const Dashboard = () => {
               <div className="progress-container">
               <h3 className="progress-title">Mood</h3>
                 <div className="mood-bar">
-                                  {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
-                                    <div
-                                      key={index}
-                                      className={`mood-segment ${mood.toLowerCase()} ${
-                                              pet.mood === mood ? "active" : ""
-                                            }`}
-                                      style={{ width: "25%" }}
-                                    >
-                                      {mood}
-                                    </div>
-                                  ))}
-                                </div>
+                    {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
+                        <div
+                        key={index} className={`mood-segment ${mood.toLowerCase()} ${
+                            pet.mood === mood ? "active" : ""
+                            }`}
+                            style={{ width: "25%" }}
+                        >
+                        {mood}
+                        </div>
+                    ))}
+                </div>
               </div>
             </div>
           );

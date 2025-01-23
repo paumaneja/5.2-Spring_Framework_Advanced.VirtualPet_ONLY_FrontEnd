@@ -3,11 +3,11 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Opcional: evita desplaçament si no és necessari */
+  overflow: hidden;
 }
 
 .login-page {
-  background-image: url("../assets/fons api.webp"); /* Ruta a la imatge */
+  background-image: url("../assets/fons api.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -19,11 +19,11 @@ html, body {
 }
 
 .login-container {
-  background: rgba(255, 255, 255, 0.2); /* Fons translúcid */
-  backdrop-filter: blur(10px); /* Efecte de desenfoc */
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombra suau */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   max-width: 300px;
   width: 100%;
   text-align: center;
@@ -31,7 +31,7 @@ html, body {
 
 h2 {
   margin-bottom: 20px;
-  color: #333333; /* Color del text */
+  color: #333333;
   font-weight: bold;
 }
 
@@ -47,18 +47,18 @@ input {
   text-align: center;
   border: none;
   border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.8); /* Transparent */
-  color: #000; /* Text negre */
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000;
   font-size: 1rem;
 }
 
 input::placeholder {
-  color: #888; /* Color del text de guia */
+  color: #888;
 }
 
 button {
   margin: 20px;
-  background-color: #4caf50; /* Verd */
+  background-color: #4caf50;
   color: white;
   padding: 10px;
   border: none;
@@ -74,11 +74,11 @@ button:hover {
 
 p {
   margin-top: 20px;
-  color: #ffffff; /* Text blanc */
+  color: #ffffff;
 }
 
 a {
-  color: #333333; /* Color groc per l'enllaç */
+  color: #333333;
   text-decoration: none;
 }
 

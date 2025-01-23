@@ -17,11 +17,10 @@ const LoginPage: React.FC = () => {
         password,
       });
       const { token, userId, role } = response.data;
-      localStorage.setItem("token", token); // Desa el token al navegador
+      localStorage.setItem("token", token);
       localStorage.setItem("userId", userId.toString());
       localStorage.setItem("role", role);
-      alert("Login successful!");
-      window.location.href = "/dashboard"; // Redirigeix a la pàgina del dashboard
+      window.location.href = "/dashboard";
     } catch (err) {
         console.error(err);
       setError("Invalid username or password");
