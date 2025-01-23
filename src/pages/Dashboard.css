@@ -59,6 +59,7 @@
   font-weight: bold;
   text-align: center;
   color: #333;
+  margin: 0px;
 }
 
 .progress-container {
@@ -85,7 +86,7 @@
 }
 
 .energy-bar {
-  background-color: #76c7c0;
+  background-color: #4caf50;
   width: 0;
   transition: width 0.5s ease-in-out;
 }
@@ -144,4 +145,54 @@
 
 .create-pet-button:hover {
   background-color: #218838;
+}
+
+h3 {
+  font-size: 15px;
+  color: #333333;
+  text-align: center;
+  margin: 0px;
+}
+
+.mood-bar {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  height: 30px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.mood-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.mood-segment.happy {
+  background-color: #4caf50; /* Verd */
+}
+
+.mood-segment.sad {
+  background-color: #2196f3; /* Blau */
+}
+
+.mood-segment.angry {
+  background-color: #f44336; /* Vermell */
+}
+
+.mood-segment.tired {
+  background-color: #ff9800; /* Taronja */
+}
+
+.mood-segment.active {
+  border: 2px solid #000;
+  transform: scale(1.05); /* Légèrement plus grand */
+  font-size: 14px; /* Augmenta la mida del text */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }

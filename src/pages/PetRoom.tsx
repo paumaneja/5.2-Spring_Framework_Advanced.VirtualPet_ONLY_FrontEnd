@@ -146,9 +146,7 @@ const PetRoom = () => {
   };
 
   return (
-    <div
-      className="pet-room"
-      style={{
+    <div className="pet-room" style={{
         backgroundImage: isPlayingVideo
           ? "none" // Si es reprodueix el vídeo, eliminem la imatge de fons
           : `url(${backgroundImage})`,
@@ -172,17 +170,34 @@ const PetRoom = () => {
 
       {/* Botons per tornar a la pàgina Dashboard i eliminar la mascota*/}
       <button className="back-button" onClick={() => navigate("/dashboard")}>
-        Back to your army
+        <img src="/assets/icons/back.png" alt="back" className="action-icon" />
       </button>
 
       <button className="delete-button" onClick={handleDeletePet}>
-        Delete Warrior
+        <img src="/assets/icons/delete.png" alt="delete" className="action-icon" />
       </button>
 
       <div className="pet-info">
         <h2>{pet.name}</h2>
-        <p>Energy: {pet.energy}%</p>
-        <p>Mood: {pet.mood}</p>
+        <div className="progress-container">
+            <h3 className="progress-title">Energy</h3>
+            <div className="progress-bar">
+                <span className="energy-bar" style={{ width: `${pet.energy}%` }}> {pet.energy}% </span>
+            </div>
+        <div className="progress-container">
+            <h3 className="progress-title">Mood</h3>
+            <div className="mood-bar">
+                {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
+                    <div key={index} className={`mood-segment ${mood.toLowerCase()} ${
+                        pet.mood === mood ? "active" : ""
+                        }`}
+                        style={{ width: "25%" }}
+                    > {mood}
+                    </div>
+                ))}
+            </div>
+        </div>
+        </div>
       </div>
      <div className="action-buttons">
           <button onClick={() => handleAction("play")}>

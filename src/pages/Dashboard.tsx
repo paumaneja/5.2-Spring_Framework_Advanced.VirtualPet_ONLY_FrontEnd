@@ -108,6 +108,7 @@ const Dashboard = () => {
               <h2 className="pet-name">{pet.name}</h2>
               <img src={imagePath} alt={`${pet.type} - ${pet.weapon}`} className="pet-image" />
               <div className="progress-container">
+              <h3 className="progress-title">Energy</h3>
                 <div className="progress-bar">
                   <span className="energy-bar" style={{ width: `${pet.energy}%` }}>
                     {pet.energy}%
@@ -115,11 +116,20 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="progress-container">
-                <div className="progress-bar">
-                  <span className="mood-bar" style={{ width: `${pet.mood === "HAPPY" ? 100 : 50}%` }}>
-                    {pet.mood}
-                  </span>
-                </div>
+              <h3 className="progress-title">Mood</h3>
+                <div className="mood-bar">
+                                  {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
+                                    <div
+                                      key={index}
+                                      className={`mood-segment ${mood.toLowerCase()} ${
+                                              pet.mood === mood ? "active" : ""
+                                            }`}
+                                      style={{ width: "25%" }}
+                                    >
+                                      {mood}
+                                    </div>
+                                  ))}
+                                </div>
               </div>
             </div>
           );
