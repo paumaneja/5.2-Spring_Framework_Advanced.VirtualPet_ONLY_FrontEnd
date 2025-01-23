@@ -16,9 +16,10 @@ const LoginPage: React.FC = () => {
         username,
         password,
       });
-      const { token, userId } = response.data;
+      const { token, userId, role } = response.data;
       localStorage.setItem("token", token); // Desa el token al navegador
       localStorage.setItem("userId", userId.toString());
+      localStorage.setItem("role", role);
       alert("Login successful!");
       window.location.href = "/dashboard"; // Redirigeix a la pàgina del dashboard
     } catch (err) {

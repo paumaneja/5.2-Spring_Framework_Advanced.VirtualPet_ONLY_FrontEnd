@@ -21,9 +21,9 @@
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin-top: 210px;
-    /* Nou estil per afegir scroll vertical */
-    max-height: 60vh; /* Limita l'alçada màxima del contenidor */
-    overflow-y: auto; /* Habilita el scroll vertical */
+  /* Nou estil per afegir scroll vertical */
+  max-height: 60vh; /* Limita l'alçada màxima del contenidor */
+  overflow-y: auto; /* Habilita el scroll vertical */
 }
 
 .pet-card {
@@ -31,17 +31,15 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #f5f5f5;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
   overflow: hidden;
   transition: transform 0.2s;
-  gap: 20px;
 
-    /* Assegura una mida consistent */
-    min-height: 400px; /* Ajust segons el contingut */
-    height: auto; /* Permet expansió segons el text */
+  min-height: 400px; /* Ajust segons el contingut */
+  height: auto; /* Permet expansió segons el text */
 }
 
 .pet-card:hover {
@@ -99,7 +97,7 @@
 }
 
 .pet-card input[type="text"] {
-  width: 100%;
+  margin: 10px;
   padding: 10px;
   border: 2px solid #4caf50;
   border-radius: 5px;
@@ -116,7 +114,7 @@
 }
 
 .pet-type-select {
-  width: 100%;
+  margin: 10px;
   padding: 10px;
   border: 2px solid #4caf50;
   border-radius: 5px;

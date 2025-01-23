@@ -41,8 +41,10 @@ form {
 }
 
 input {
+  margin: 20px;
   margin-bottom: 15px;
   padding: 10px;
+  text-align: center;
   border: none;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.8); /* Transparent */
@@ -55,6 +57,7 @@ input::placeholder {
 }
 
 button {
+  margin: 20px;
   background-color: #4caf50; /* Verd */
   color: white;
   padding: 10px;
