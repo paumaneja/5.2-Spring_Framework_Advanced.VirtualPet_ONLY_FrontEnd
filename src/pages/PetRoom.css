@@ -22,6 +22,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  background: rgba(255, 255, 255, 1);
 }
 
 .video-player, .pet-image {
@@ -87,42 +88,57 @@
 
 .action-buttons {
   position: absolute;
-  bottom: 20px;
+  bottom: 130px;
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 80px;
 }
 
 .action-buttons button {
   background: none;
-  border: none;
   cursor: pointer;
+  border-radius: 15px;
 }
 
 .action-buttons img {
   width: 60px;
   height: 60px;
   transition: transform 0.3s ease;
+  border-radius: 15px;
 }
 
 .action-buttons img:hover {
   transform: scale(1.2);
+  border-radius: 15px;
 }
 
 .weapon-options {
+  width: 60px;
+  height: 60px;
+  background: none;
   position: absolute;
-  left: calc(50% + 50px); /* A la dreta del botó de canvi d'arma */
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: -40px;
+  flex-direction: row;
+  justify-content: center;
+  bottom: 280px;
+  right: 705px;
+}
+
+.weapon-options button{
+  background: none;
+  cursor: pointer;
+  border-radius: 15px;
+  width: 55px;
+  height: 55px;
 }
 
 .weapon-button img {
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   transition: transform 0.3s ease;
+  border-radius: 15px;
+  background: none;
 }
 
 .weapon-button img:hover {
@@ -136,23 +152,38 @@
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0px;
 }
+
 
 .back-button img {
   width: 80px;
   height: 80px;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.back-button img:hover {
+  transform: scale(1.2);
 }
 
 .delete-button {
   position: absolute;
-  bottom: 10px;
+  top: 10px;
   right: 10px;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0px;
 }
 
 .delete-button img {
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.delete-button img:hover {
+  transform: scale(1.2);
 }
