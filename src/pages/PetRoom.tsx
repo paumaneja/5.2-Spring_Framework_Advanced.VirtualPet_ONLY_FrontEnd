@@ -43,7 +43,9 @@ const PetRoom = () => {
     return <p>Loading...</p>;
   }
 
- const backgroundImage = `/assets/${pet.type.toLowerCase()}_${pet.weapon ? pet.weapon.toLowerCase().replace(" ", "_") : "default"}.png`;
+  const backgroundImage = `/assets/${pet.type.toLowerCase()}_${
+    pet.weapon ? pet.weapon.toLowerCase().replace(" ", "_") : "default"
+  }.png`;
 
   const getVideoForPet = (type: string, weapon: string | null, action: string) => {
     const videoMap: Record<string, Record<string, Record<string, string>>> = {
@@ -115,8 +117,30 @@ const PetRoom = () => {
     }
   };
 
-
   const handleAction = async (action: string, weapon?: string) => {
+    if (action === "changeWeapon" && weapon) {
+      try {
+        const url = `http://localhost:8080/pets/${id}?action=${action}&newWeapon=${weapon}`;
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Action failed");
+        }
+
+        const updatedPet = await response.json();
+        setPet(updatedPet);
+        setShowWeaponOptions(false);
+      } catch (err: any) {
+        setError("Failed to perform action. Please try again.");
+      }
+      return;
+    }
+
     const video = getVideoForPet(pet.type, pet.weapon, action);
     setVideoSrc(video);
     setIsPlayingVideo(true);
@@ -178,8 +202,6 @@ const PetRoom = () => {
         backgroundImage: isPlayingVideo
           ? "none"
           : `url(${backgroundImage})`,
-        backgroundSize: "contain",
-        backgroundPosition: "center",
       }}
     >
       {isPlayingVideo && videoSrc && (
@@ -206,39 +228,39 @@ const PetRoom = () => {
       <div className="pet-info">
         <h2>{pet.name}</h2>
         <div className="progress-container">
-            <h3 className="progress-title">Energy</h3>
-            <div className="progress-bar">
-                <span className="energy-bar" style={{ width: `${pet.energy}%` }}> {pet.energy}% </span>
-            </div>
-        <div className="progress-container">
-            <h3 className="progress-title">Mood</h3>
-            <div className="mood-bar">
-                {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
-                    <div key={index} className={`mood-segment ${mood.toLowerCase()} ${
-                        pet.mood === mood ? "active" : ""
-                        }`}
-                        style={{ width: "25%" }}
-                    > {mood}
-                    </div>
-                ))}
-            </div>
-        </div>
+          <h3 className="progress-title">Energy</h3>
+          <div className="progress-bar">
+            <span className="energy-bar" style={{ width: `${pet.energy}%` }}> {pet.energy}% </span>
+          </div>
+          <h3 className="progress-title">Mood</h3>
+          <div className="mood-bar">
+            {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
+              <div key={index} className={`mood-segment ${mood.toLowerCase()} ${
+                  pet.mood === mood ? "active" : ""
+                }`}
+                style={{ width: "25%" }}
+              > {mood}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-     <div className="action-buttons">
-          <button onClick={() => handleAction("play")}>
-            <img src="/assets/icons/play.png" alt="Play" className="action-icon" />
-          </button>
-          <button onClick={() => handleAction("feed")}>
-            <img src="/assets/icons/feed.png" alt="Feed" className="action-icon" />
-          </button>
-          <button onClick={() => handleAction("sleep")}>
-            <img src="/assets/icons/sleep.png" alt="Sleep" className="action-icon" />
-          </button>
-          <button onClick={() => setShowWeaponOptions(!showWeaponOptions)}>
-            <img src="/assets/icons/change_weapon.png" alt="Change Weapon" className="action-icon" />
-          </button>
-        </div>
+
+      <div className="action-buttons">
+        <button onClick={() => handleAction("play")}>
+          <img src="/assets/icons/play.png" alt="Play" className="action-icon" />
+        </button>
+        <button onClick={() => handleAction("feed")}>
+          <img src="/assets/icons/feed.png" alt="Feed" className="action-icon" />
+        </button>
+        <button onClick={() => handleAction("sleep")}>
+          <img src="/assets/icons/sleep.png" alt="Sleep" className="action-icon" />
+        </button>
+        <button onClick={() => setShowWeaponOptions(!showWeaponOptions)}>
+          <img src="/assets/icons/change_weapon.png" alt="Change Weapon" className="action-icon" />
+        </button>
+      </div>
+
       {showWeaponOptions && renderWeaponOptions()}
     </div>
   );
