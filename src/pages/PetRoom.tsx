@@ -35,68 +35,101 @@ const PetRoom = () => {
     fetchPet();
   }, [id]);
 
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
+  const getVideoOrImageForAction = (action?: string) => {
+    if (!pet) return action ? "" : "/assets/default.png"; // Retorna imatge per defecte si no hi ha pet
 
-  if (!pet) {
-    return <p>Loading...</p>;
-  }
+    const type = pet.type?.toLowerCase() || "default";
+    const weapon = pet.weapon?.toLowerCase().replace(" ", "_") || "default";
 
-  const backgroundImage = `/assets/${pet.type.toLowerCase()}_${
-    pet.weapon ? pet.weapon.toLowerCase().replace(" ", "_") : "default"
-  }.png`;
+    if (action) {
+      // Retorna el vídeo per a l'acció
+      return `/assets/videos/${type}_${weapon}_${action}.mp4`;
+    }
 
-  const getVideoForPet = (type: string, weapon: string | null, action: string) => {
-    const videoMap: Record<string, Record<string, Record<string, string>>> = {
-      STARWARS: {
-        Pistol: {
-          play: "/assets/videos/starwars_pistol_play.mp4",
-          feed: "/assets/videos/starwars_pistol_feed.mp4",
-          sleep: "/assets/videos/starwars_pistol_sleep.mp4",
-        },
-        "Machine Gun": {
-          play: "/assets/videos/starwars_machine_gun_play.mp4",
-          feed: "/assets/videos/starwars_machine_gun_feed.mp4",
-          sleep: "/assets/videos/starwars_machine_gun_sleep.mp4",
-        },
-        Lightsaber: {
-          play: "/assets/videos/starwars_lightsaber_play.mp4",
-          feed: "/assets/videos/starwars_lightsaber_feed.mp4",
-          sleep: "/assets/videos/starwars_lightsaber_sleep.mp4",
-        },
-        default: {
-          play: "/assets/videos/starwars_default_play.mp4",
-          feed: "/assets/videos/starwars_default_feed.mp4",
-          sleep: "/assets/videos/starwars_default_sleep.mp4",
-        },
-      },
-      LORDRINGS: {
-        Sword: {
-          play: "/assets/videos/lordrings_sword_play.mp4",
-          feed: "/assets/videos/lordrings_sword_feed.mp4",
-          sleep: "/assets/videos/lordrings_sword_sleep.mp4",
-        },
-        Axe: {
-          play: "/assets/videos/lordrings_axe_play.mp4",
-          feed: "/assets/videos/lordrings_axe_feed.mp4",
-          sleep: "/assets/videos/lordrings_axe_sleep.mp4",
-        },
-        Bow: {
-          play: "/assets/videos/lordrings_bow_play.mp4",
-          feed: "/assets/videos/lordrings_bow_feed.mp4",
-          sleep: "/assets/videos/lordrings_bow_sleep.mp4",
-        },
-        default: {
-          play: "/assets/videos/lordrings_default_play.mp4",
-          feed: "/assets/videos/lordrings_default_feed.mp4",
-          sleep: "/assets/videos/lordrings_default_sleep.mp4",
-        },
-      },
-    };
-
-    return videoMap[type]?.[weapon || "default"]?.[action] || "/assets/videos/default.mp4";
+    // Retorna la ruta de la imatge fixa
+    return `/assets/${type}_${weapon}.png`;
   };
+
+  const handleAction = async (action: string, weapon?: string) => {
+      if (action === "changeWeapon" && weapon) {
+            try {
+            const url = `http://localhost:8080/pets/${id}?action=${action}&newWeapon=${weapon}`;
+            const response = await fetch(url, {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error("Action failed");
+            }
+
+            const updatedPet = await response.json();
+            setPet(updatedPet);
+            setShowWeaponOptions(false);
+          } catch (err: any) {
+            setError("Failed to perform action. Please try again.");
+          }
+          return;
+      }
+
+      const video = getVideoOrImageForAction(action);
+      setVideoSrc(video);
+      setIsPlayingVideo(true);
+
+      setTimeout(() => {
+        setIsPlayingVideo(false);
+        setVideoSrc(null);
+      }, 5000);
+
+      try {
+        const url = weapon
+          ? `http://localhost:8080/pets/${id}?action=${action}&newWeapon=${weapon}`
+          : `http://localhost:8080/pets/${id}?action=${action}`;
+
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Action failed");
+        }
+
+        const updatedPet = await response.json();
+          setPet(updatedPet);
+          setShowWeaponOptions(false);
+      } catch (err: any) {
+          setError("Failed to perform action. Please try again.");
+      }
+  };
+
+
+    const renderWeaponOptions = () => {
+        const weaponOptions = pet.type === "STARWARS"
+            ? ["Pistol", "Machine Gun", "Lightsaber"]
+            : ["Sword", "Axe", "Bow"];
+
+      return (
+        <div className="weapon-options">
+          {weaponOptions.map((weapon) => (
+            <button
+              key={weapon}
+              className="weapon-button"
+              onClick={() => handleAction("changeWeapon", weapon)}
+            >
+              <img
+                src={`/assets/icons/${weapon.toLowerCase().replace(" ", "_")}.png`}
+                alt={weapon}
+              />
+            </button>
+          ))}
+        </div>
+      );
+    };
 
   const handleDeletePet = async () => {
     try {
@@ -117,129 +150,69 @@ const PetRoom = () => {
     }
   };
 
-  const handleAction = async (action: string, weapon?: string) => {
-    if (action === "changeWeapon" && weapon) {
-      try {
-        const url = `http://localhost:8080/pets/${id}?action=${action}&newWeapon=${weapon}`;
-        const response = await fetch(url, {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+  if (error) {
+    return <p style={{ color: "red" }}>{error}</p>;
+  }
 
-        if (!response.ok) {
-          throw new Error("Action failed");
-        }
-
-        const updatedPet = await response.json();
-        setPet(updatedPet);
-        setShowWeaponOptions(false);
-      } catch (err: any) {
-        setError("Failed to perform action. Please try again.");
-      }
-      return;
-    }
-
-    const video = getVideoForPet(pet.type, pet.weapon, action);
-    setVideoSrc(video);
-    setIsPlayingVideo(true);
-
-    setTimeout(() => {
-      setIsPlayingVideo(false);
-      setVideoSrc(null);
-    }, 5000);
-
-    try {
-      const url = weapon
-        ? `http://localhost:8080/pets/${id}?action=${action}&newWeapon=${weapon}`
-        : `http://localhost:8080/pets/${id}?action=${action}`;
-
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Action failed");
-      }
-
-      const updatedPet = await response.json();
-      setPet(updatedPet);
-      setShowWeaponOptions(false);
-    } catch (err: any) {
-      setError("Failed to perform action. Please try again.");
-    }
-  };
-
-  const renderWeaponOptions = () => {
-    const weaponOptions = pet.type === "STARWARS"
-      ? ["Pistol", "Machine Gun", "Lightsaber"]
-      : ["Sword", "Axe", "Bow"];
-
-    return (
-      <div className="weapon-options">
-        {weaponOptions.map((weapon) => (
-          <button
-            key={weapon}
-            className="weapon-button"
-            onClick={() => handleAction("changeWeapon", weapon)}
-          >
-            <img
-              src={`/assets/icons/${weapon.toLowerCase().replace(" ", "_")}.png`}
-              alt={weapon}
-            />
-          </button>
-        ))}
-      </div>
-    );
-  };
+  if (!pet) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className="pet-room" style={{
-        backgroundImage: isPlayingVideo
-          ? "none"
-          : `url(${backgroundImage})`,
-      }}
-    >
-      {isPlayingVideo && videoSrc && (
-        <video
-          src={videoSrc}
-          autoPlay
-          muted
-          className="video-background"
-          onEnded={() => {
-            setIsPlayingVideo(false);
-            setVideoSrc(null);
-          }}
-        />
+    <div className="pet-room">
+      {isPlayingVideo && videoSrc ? (
+        <div className="video-container">
+          <video src={videoSrc} autoPlay className="video-player" />
+            <button className="back-button" onClick={() => navigate("/dashboard")}>
+              <img src="/assets/icons/back.png" alt="Back" />
+            </button>
+
+            <button className="delete-button" onClick={handleDeletePet}>
+              <img src="/assets/icons/delete.png" alt="delete" className="action-icon" />
+            </button>
+        </div>
+      ) : (
+        <div className="video-container">
+          <img
+            src={getVideoOrImageForAction()}
+            alt="Pet"
+            className="pet-image"
+          />
+          <button className="back-button" onClick={() => navigate("/dashboard")}>
+              <img src="/assets/icons/back.png" alt="Back" />
+          </button>
+
+          <button className="delete-button" onClick={handleDeletePet}>
+             <img src="/assets/icons/delete.png" alt="delete" className="action-icon" />
+          </button>
+        </div>
       )}
-
-      <button className="back-button" onClick={() => navigate("/dashboard")}>
-        <img src="/assets/icons/back.png" alt="back" className="action-icon" />
-      </button>
-
-      <button className="delete-button" onClick={handleDeletePet}>
-        <img src="/assets/icons/delete.png" alt="delete" className="action-icon" />
-      </button>
 
       <div className="pet-info">
         <h2>{pet.name}</h2>
         <div className="progress-container">
-          <h3 className="progress-title">Energy</h3>
+          <h3>Energy</h3>
           <div className="progress-bar">
-            <span className="energy-bar" style={{ width: `${pet.energy}%` }}> {pet.energy}% </span>
+            <span
+              className="energy-bar"
+              style={{ width: `${pet.energy}%` }}
+            >
+              {pet.energy}%
+            </span>
           </div>
-          <h3 className="progress-title">Mood</h3>
+        </div>
+        <div className="progress-container">
+          <h3>Mood</h3>
           <div className="mood-bar">
-            {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood, index) => (
-              <div key={index} className={`mood-segment ${mood.toLowerCase()} ${
+            {["HAPPY", "SAD", "ANGRY", "TIRED"].map((mood) => (
+              <div
+                key={mood}
+                className={`mood-segment ${mood.toLowerCase()} ${
                   pet.mood === mood ? "active" : ""
                 }`}
                 style={{ width: "25%" }}
-              > {mood}
+              >
+                {mood}
               </div>
             ))}
           </div>
@@ -248,16 +221,16 @@ const PetRoom = () => {
 
       <div className="action-buttons">
         <button onClick={() => handleAction("play")}>
-          <img src="/assets/icons/play.png" alt="Play" className="action-icon" />
+          <img src="/assets/icons/play.png" alt="Play" />
         </button>
         <button onClick={() => handleAction("feed")}>
-          <img src="/assets/icons/feed.png" alt="Feed" className="action-icon" />
+          <img src="/assets/icons/feed.png" alt="Feed" />
         </button>
         <button onClick={() => handleAction("sleep")}>
-          <img src="/assets/icons/sleep.png" alt="Sleep" className="action-icon" />
+          <img src="/assets/icons/sleep.png" alt="Sleep" />
         </button>
         <button onClick={() => setShowWeaponOptions(!showWeaponOptions)}>
-          <img src="/assets/icons/change_weapon.png" alt="Change Weapon" className="action-icon" />
+          <img src="/assets/icons/change_weapon.png" alt="Change Weapon" />
         </button>
       </div>
 
