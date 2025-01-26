@@ -36,17 +36,15 @@ const PetRoom = () => {
   }, [id]);
 
   const getVideoOrImageForAction = (action?: string) => {
-    if (!pet) return action ? "" : "/assets/default.png"; // Retorna imatge per defecte si no hi ha pet
+    if (!pet) return action ? "" : "/assets/default.png";
 
     const type = pet.type?.toLowerCase() || "default";
     const weapon = pet.weapon?.toLowerCase().replace(" ", "_") || "default";
 
     if (action) {
-      // Retorna el vídeo per a l'acció
       return `/assets/videos/${type}_${weapon}_${action}.mp4`;
     }
 
-    // Retorna la ruta de la imatge fixa
     return `/assets/${type}_${weapon}.png`;
   };
 
