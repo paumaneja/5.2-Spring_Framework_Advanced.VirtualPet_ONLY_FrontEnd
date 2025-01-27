@@ -1,50 +1,54 @@
-# React + TypeScript + Vite
+# VirtualPet Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of the VirtualPet application, developed using React, TypeScript, and Vite. It complements the backend by providing a user-friendly interface to manage and interact with virtual pets.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User authentication (Login/Sign-up).
+- Manage virtual pets (create, update, delete).
+- Perform actions with pets, such as:
+  - Feeding the pet.
+  - Playing with the pet.
+  - Putting the pet to sleep.
+- Interactive UI with dynamic updates based on pet status and actions.
 
-## Expanding the ESLint configuration
+## Screenshots
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### User Authentication
 
-- Configure the top-level `parserOptions` property like this:
+**Login Screen:**
+![Login Screen](./screenshots/login.png)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+**Sign-up Screen:**
+![Sign-up Screen](./screenshots/signup.png)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Pet Management
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+**Pet Dashboard:**
+![Pet Dashboard](./screenshots/dashboard.png)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Interacting with Pets
+
+**Feeding a Pet:**
+![Feeding Pet](./screenshots/feed.png)
+
+**Playing with a Pet:**
+![Playing with Pet](./screenshots/play.png)
+
+**Putting a Pet to Sleep:**
+![Sleeping Pet](./screenshots/sleep.png)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (version 18 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your_user/VirtualPetFrontend.git
+   cd VirtualPetFrontend
